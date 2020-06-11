@@ -25,9 +25,16 @@ module ``about pipelining`` =
         let numbers = [0..5]
 
         let evens = List.filter isEven numbers
+        AssertEquality evens [0;2;4]
+
+
         let result = List.map square evens
 
-        AssertEquality result __
+        AssertEquality result [0;4;16]
+
+        let result2 = List.map isEven numbers
+        AssertEquality result2 [true;false;true;false;true;false]
+
 
     [<Koan>]
     let SquareEvenNumbersWithParens() =
@@ -39,19 +46,31 @@ module ``about pipelining`` =
 
         let result = List.map square (List.filter isEven numbers)
 
-        AssertEquality result __
+        AssertEquality result [0;4;16]
 
     [<Koan>]
     let SquareEvenNumbersWithPipelineOperator() =
         (* In F#, you can use the pipeline operator to get the benefit of the 
            parens style with the readablity of the statement style. *)
+        
+        // let foo = [0..5] |> List.filter isEven
+        // let foo = List.filter isEven [0..5]
+
+        // let bar = 5 |> isEven
+        // let bar = isEven 5
+
+        // let multipleArgumentFunction w x y z =
+        //     "hello"
+        
+        // let baz = "bla" |> multipleArgumentFunction 3.0 false "x"
+
 
         let result =
             [0..5]
             |> List.filter isEven
             |> List.map square
         
-        AssertEquality result __
+        AssertEquality result [0;4;16]
 
     [<Koan>]
     let HowThePipeOperatorIsDefined() =
@@ -63,4 +82,4 @@ module ``about pipelining`` =
             |> List.filter isEven
             |> List.map square
 
-        AssertEquality result __
+        AssertEquality result [0;4;16]

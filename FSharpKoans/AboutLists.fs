@@ -16,14 +16,16 @@ module ``about lists`` =
 
     [<Koan>]
     let CreatingLists() =
-        let list = ["apple"; "pear"; "grape"; "peach"]
+        let foo = ["apple"; "pear"; "grape"; "peach"]
         
         //Note: The list data type in F# is a singly linked list, 
         //      so indexing elements is O(n). 
-        
-        AssertEquality list.Head __
-        AssertEquality list.Tail __
-        AssertEquality list.Length __
+
+         
+        AssertEquality (List.head foo) "apple"
+        AssertEquality foo.Head "apple"
+        AssertEquality foo.Tail ["pear"; "grape"; "peach"]
+        AssertEquality foo.Length 4
 
         (* .NET developers coming from other languages may be surprised
            that F#'s list type is not the same as the base class library's
@@ -31,36 +33,41 @@ module ``about lists`` =
 
         let dotNetList = new List<string>()
         //you don't need to modify the following line
-        AssertInequality (list.GetType()) (dotNetList.GetType())
+        AssertInequality (foo.GetType()) (dotNetList.GetType())
 
     [<Koan>]
     let BuildingNewLists() =
-        let first = ["grape"; "peach"]
+        let first = ["grape"; "peach"]  
         let second = "pear" :: first
         let third = "apple" :: second
 
         //Note: "::" is known as "cons"
         
         AssertEquality ["apple"; "pear"; "grape"; "peach"] third
-        AssertEquality second __
-        AssertEquality first __
+        AssertEquality second ["pear"; "grape"; "peach"]
+        AssertEquality first ["grape"; "peach"]
 
         //What happens if you uncomment the following?
 
-        //first.Head <- "apple"
-        //first.Tail <- ["peach"; "pear"]
+        // let mutable foo = [ "hello"; "world" ]
+        // foo <- []
+        // let head = foo.Head
+        // ()
+
+        // first.Head <- "apple"
+        // first.Tail <- ["peach"; "pear"]
 
         //THINK ABOUT IT: Can you change the contents of a list once it has been
-        //                created?
-
+                       //created?
+    
 
     [<Koan>]
     let ConcatenatingLists() =
         let first = ["apple"; "pear"; "grape"]
-        let second = first @ ["peach"]
+        let second = first @ ["peach" ]
 
-        AssertEquality first __
-        AssertEquality second __
+        AssertEquality first ["apple"; "pear"; "grape"]
+        AssertEquality second ["apple"; "pear"; "grape"; "peach"]
 
     (* THINK ABOUT IT: In general, what performs better for building lists, 
        :: or @? Why?
@@ -73,21 +80,26 @@ module ``about lists`` =
     let CreatingListsWithARange() =
         let list = [0..4]
         
-        AssertEquality list.Head __
-        AssertEquality list.Tail __
+        AssertEquality list.Head 0
+        AssertEquality list.Tail [1;2;3;4]
         
     [<Koan>]
     let CreatingListsWithComprehensions() =
         let list = [for i in 0..4 do yield i ]
                             
-        AssertEquality list __
+        AssertEquality list [0;1;2;3;4]
     
     [<Koan>]
     let ComprehensionsWithConditions() =
         let list = [for i in 0..10 do 
                         if i % 2 = 0 then yield i ]
-                            
-        AssertEquality list __
+        
+        let foo =
+            [0..10]
+            |> List.filter (fun i -> i % 2 =0)
+
+        AssertEquality list [0;2;4;6;8;10]
+        AssertEquality foo [0;2;4;6;8;10]
 
     [<Koan>]
     let TransformingListsWithMap() =
@@ -97,8 +109,8 @@ module ``about lists`` =
         let original = [0..5]
         let result = List.map square original
 
-        AssertEquality original __
-        AssertEquality result __
+        AssertEquality original [0;1;2;3;4;5];
+        AssertEquality result [0;1;4;9;16;25]
 
     [<Koan>]
     let FilteringListsWithFilter() =
@@ -108,8 +120,8 @@ module ``about lists`` =
         let original = [0..5]
         let result = List.filter isEven original
 
-        AssertEquality original __
-        AssertEquality result __
+        AssertEquality original [0;1;2;3;4;5]
+        AssertEquality result [0;2;4]
 
     [<Koan>]
     let DividingListsWithPartition() =
@@ -119,9 +131,23 @@ module ``about lists`` =
         let original = [0..5]
         let result1, result2 = List.partition isOdd original
         
-        AssertEquality result1 __
-        AssertEquality result2 __
+        let lessThanThree x = 
+            x < 3 
+        let result3, result4 = List.partition lessThanThree original
+
+        let myFilter predicate foo =
+            let r = List.partition predicate foo |> fst
+            // |> fst 
+            r
+            
+        
+
+        AssertEquality result1 [1;3;5]
+        AssertEquality result2 [0;2;4]
+        AssertEquality result3 [0;1;2]
+        AssertEquality result4 [3;4;5]
 
     (* Note: There are many other useful methods in the List module. Check them
        via intellisense in Visual Studio by typing '.' after List, or online at
-       http://msdn.microsoft.com/en-us/library/ee353738.aspx *)
+    http://msdn.microsoft.com/en-us/library/ee353738.aspx *)
+     

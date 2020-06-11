@@ -25,6 +25,11 @@ open FSharpKoans.Core
 // let splitCommas (x:string) =
 //     x.Split([|','|])
 //---------------------------------------------------------------
+type StockInformation =
+      { Date: string 
+        Close: float
+        Open: float
+        }
 [<Koan(Sort = 15)>]
 module ``about the stock example`` =
     
@@ -58,8 +63,32 @@ module ``about the stock example`` =
     // tests for yourself along the way. You can also try 
     // using the F# Interactive window to check your progress.
 
+//    type StockInformation =
+//       { Date: string 
+//         Close: float
+//         Open: float
+//         }
+
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
+        let splitCommas (x:string) =
+            x.Split([|','|])
+
+        let getStockInfoFromString (line: string): StockInformation = 
+            (splitCommas line) |> (fun splitLine -> 
+            {Date = splitLine.[0];
+             Open = System.Double.Parse(splitLine.[1]); 
+            Close = System.Double.Parse(splitLine.[4])})
+            
+        let calculateDifferece (x:StockInformation) = 
+           abs (x.Open - x.Close)
+
+        let result =  (stockData
+                       |> List.map getStockInfoFromString 
+                       |> List.map calculateDifferece 
+                       |> List.max )
+        printfn "%A" result 
         
-        AssertEquality "2012-03-13" result
+       // AssertEquality "2012-03-13" result
+//let splitCommas (x:string) =
+//     x.Split([|','|])

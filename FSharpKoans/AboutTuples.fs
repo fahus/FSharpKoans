@@ -14,7 +14,7 @@ module ``about tuples`` =
     let CreatingTuples() =
         let items = ("apple", "dog")
         
-        AssertEquality items ("apple", __)
+        AssertEquality items ("apple", "dog")
         
     [<Koan>]
     let AccessingTupleElements() =
@@ -23,8 +23,16 @@ module ``about tuples`` =
         let fruit = fst items
         let animal = snd items
         
-        AssertEquality fruit __
-        AssertEquality animal __
+        AssertEquality fruit "apple"
+        AssertEquality animal "dog"
+
+    
+    // let third t =
+    //    let _, _, three, _ = t 
+    //    three 
+    // let fruits =  ("apple", "pear", "orange", "kiwi")
+    // let result = third fruits
+
 
     [<Koan>]
     let AccessingTupleElementsWithPatternMatching() =
@@ -41,9 +49,9 @@ module ``about tuples`` =
         
         let fruit, animal, car = items
         
-        AssertEquality fruit __
-        AssertEquality animal __
-        AssertEquality car __
+        AssertEquality fruit "apple"
+        AssertEquality animal "dog"
+        AssertEquality car "Mustang"
         
     [<Koan>]
     let IgnoringValuesWithPatternMatching() =
@@ -51,7 +59,7 @@ module ``about tuples`` =
         
         let _, animal, _ = items
         
-        AssertEquality animal __
+        AssertEquality animal "dog"
     
     (* NOTE: pattern matching is found in many places
              throughout F#, and we'll revisit it again later *)
@@ -64,8 +72,8 @@ module ``about tuples`` =
         let squared, cubed = squareAndCube 3.0
         
         
-        AssertEquality squared __
-        AssertEquality cubed __
+        AssertEquality squared 9.0
+        AssertEquality cubed 27.0
     
     (* THINK ABOUT IT: Is there really more than one return value?
                        What type does the squareAndCube function
@@ -78,4 +86,4 @@ module ``about tuples`` =
             
         let result = squareAndCube 3.0
        
-        AssertEquality result __
+        AssertEquality result (9.0,27.0)
