@@ -81,14 +81,15 @@ module ``about the stock example`` =
             Close = System.Double.Parse(splitLine.[4])})
             
         let calculateDifferece (x:StockInformation) = 
-           abs (x.Open - x.Close)
+           abs (x.Open - x.Close) 
 
         let result =  (stockData
+                       |> List.tail
                        |> List.map getStockInfoFromString 
                        |> List.map calculateDifferece 
                        |> List.max )
+                       |> string
+
         printfn "%A" result 
         
-       // AssertEquality "2012-03-13" result
-//let splitCommas (x:string) =
-//     x.Split([|','|])
+        AssertEquality "2012-03-13" result
