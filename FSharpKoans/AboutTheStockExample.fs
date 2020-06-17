@@ -25,11 +25,27 @@ open FSharpKoans.Core
 // let splitCommas (x:string) =
 //     x.Split([|','|])
 //---------------------------------------------------------------
+
 type StockInformation =
       { Date: string 
         Close: float
         Open: float
         }
+
+
+[<CustomComparison; StructuralEquality>]
+type StockInfoDifference  = 
+    { Date: string
+      Difference: float
+    }
+    interface System.IComparable with 
+     member x.CompareTo yobj = 
+        let y = yobj :?> StockInfoDifference
+        if x.Difference > y.Difference then 1 
+        elif x.Difference < y.Difference then -1 
+        else 0
+
+     
 [<Koan(Sort = 15)>]
 module ``about the stock example`` =
     
@@ -68,7 +84,10 @@ module ``about the stock example`` =
 //         Close: float
 //         Open: float
 //         }
-
+// type StockInfoDifference = 
+//     { Date: string
+//       Difference: float}
+// StockInformation -> StockInfoDiff
     [<Koan>]
     let YouGotTheAnswerCorrect() =
         let splitCommas (x:string) =
@@ -82,14 +101,20 @@ module ``about the stock example`` =
             
         let calculateDifferece (x:StockInformation) = 
            abs (x.Open - x.Close) 
+      
+        let getInfoDifference (x: StockInformation) = 
+            {Date = x.Date
+             Difference = calculateDifferece x }
 
-        let result =  (stockData
+        let result =  stockData
                        |> List.tail
                        |> List.map getStockInfoFromString 
-                       |> List.map calculateDifferece 
-                       |> List.max )
-                       |> string
+                       |> List.map getInfoDifference 
+                       |> List.max
+                       
+                       
+
 
         printfn "%A" result 
         
-        AssertEquality "2012-03-13" result
+        AssertEquality "2012-03-13" result.Date
